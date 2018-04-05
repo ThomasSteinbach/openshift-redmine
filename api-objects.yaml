@@ -25,32 +25,45 @@ items:
 - apiVersion: v1
   kind: PersistentVolumeClaim
   metadata:
-    annotations:
-      openshift.io/generated-by: OpenShiftNewApp
+    annotations: {}
     creationTimestamp: null
-    labels:
-      app: redmine
-      template: mysql-persistent-template
-    name: mysql
+    name: mysql-data
   spec:
     accessModes:
     - ReadWriteOnce
     resources:
       requests:
         storage: 10Gi
+    volumeName: redmine-mysql-data
+- apiVersion: v1
+  kind: PersistentVolumeClaim
+  metadata:
+    annotations: {}
+    creationTimestamp: null
+    name: redmine-files
+  spec:
+    accessModes:
+    - ReadWriteOnce
+    resources:
+      requests:
+        storage: 20Gi
+    volumeName: redmine-redmine-files
 - apiVersion: v1
   kind: ServiceAccount
   metadata:
+    annotations: {}
     creationTimestamp: null
     name: builder
 - apiVersion: v1
   kind: ServiceAccount
   metadata:
+    annotations: {}
     creationTimestamp: null
     name: default
 - apiVersion: v1
   kind: ServiceAccount
   metadata:
+    annotations: {}
     creationTimestamp: null
     name: deployer
 - apiVersion: v1
@@ -99,7 +112,7 @@ items:
                 name: redmine-secrets
           - name: MYSQL_DATABASE
             value: redmine
-          image: centos/mysql-57-centos7@sha256:437b8bbacb084d2005cf17fe6ea91cad01260d1cbc75bf3cc00bc3deb17f9022
+          image: centos/mysql-57-centos7@sha256:d5632b029709619bc6982ad41defe20d2f61d1a0f757b77a6fa6638d3b9b7994
           imagePullPolicy: IfNotPresent
           livenessProbe:
             failureThreshold: 3
@@ -142,7 +155,7 @@ items:
         volumes:
         - name: mysql-data
           persistentVolumeClaim:
-            claimName: mysql
+            claimName: mysql-data
     test: false
     triggers:
     - imageChangeParams:
@@ -197,7 +210,7 @@ items:
               secretKeyRef:
                 key: database-root-password
                 name: redmine-secrets
-          image: library/redmine@sha256:f810929be8cfe122cea1049146c2c7be429a23abd7a17b578b41ab0778648338
+          image: library/redmine@sha256:5e3f8240281e0df3114db734dc84692406ffd333df0f7389bff84f0eecdb9968
           imagePullPolicy: Always
           name: redmine
           ports:
@@ -208,15 +221,16 @@ items:
           terminationMessagePolicy: File
           volumeMounts:
           - mountPath: /usr/src/redmine/files
-            name: redmine-1
+            name: redmine-files
         dnsPolicy: ClusterFirst
         restartPolicy: Always
         schedulerName: default-scheduler
         securityContext: {}
         terminationGracePeriodSeconds: 30
         volumes:
-        - emptyDir: {}
-          name: redmine-1
+        - name: redmine-files
+          persistentVolumeClaim:
+            claimName: redmine-files
     test: false
     triggers:
     - type: ConfigChange
