@@ -27,27 +27,27 @@ items:
   metadata:
     annotations: {}
     creationTimestamp: null
-    name: mysql-data
+    name: var-lib-mysql-data
   spec:
     accessModes:
     - ReadWriteOnce
     resources:
       requests:
         storage: 10Gi
-    volumeName: redmine-mysql-data
+    volumeName: redmine-var-lib-mysql-data
 - apiVersion: v1
   kind: PersistentVolumeClaim
   metadata:
     annotations: {}
     creationTimestamp: null
-    name: redmine-files
+    name: usr-src-redmine-files
   spec:
     accessModes:
     - ReadWriteOnce
     resources:
       requests:
         storage: 20Gi
-    volumeName: redmine-redmine-files
+    volumeName: redmine-usr-src-redmine-files
 - apiVersion: v1
   kind: ServiceAccount
   metadata:
@@ -146,16 +146,16 @@ items:
           terminationMessagePolicy: File
           volumeMounts:
           - mountPath: /var/lib/mysql/data
-            name: mysql-data
+            name: var-lib-mysql-data
         dnsPolicy: ClusterFirst
         restartPolicy: Always
         schedulerName: default-scheduler
         securityContext: {}
         terminationGracePeriodSeconds: 30
         volumes:
-        - name: mysql-data
+        - name: var-lib-mysql-data
           persistentVolumeClaim:
-            claimName: mysql-data
+            claimName: var-lib-mysql-data
     test: false
     triggers:
     - imageChangeParams:
@@ -221,16 +221,16 @@ items:
           terminationMessagePolicy: File
           volumeMounts:
           - mountPath: /usr/src/redmine/files
-            name: redmine-files
+            name: usr-src-redmine-files
         dnsPolicy: ClusterFirst
         restartPolicy: Always
         schedulerName: default-scheduler
         securityContext: {}
         terminationGracePeriodSeconds: 30
         volumes:
-        - name: redmine-files
+        - name: usr-src-redmine-files
           persistentVolumeClaim:
-            claimName: redmine-files
+            claimName: usr-src-redmine-files
     test: false
     triggers:
     - type: ConfigChange
