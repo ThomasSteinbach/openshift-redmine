@@ -3,6 +3,8 @@ items:
 - apiVersion: v1
   kind: ImageStream
   metadata:
+    annotations: {}
+    creationTimestamp: null
     labels:
       app: nextcloud
     name: mysql
@@ -16,7 +18,7 @@ items:
         kind: DockerImage
         name: mysql:5.7
       importPolicy: {}
-      name: "latest"
+      name: latest
       referencePolicy:
         type: Source
 - apiVersion: v1
@@ -46,19 +48,6 @@ items:
   metadata:
     annotations: {}
     creationTimestamp: null
-    name: var-lib-mysql
-  spec:
-    accessModes:
-    - ReadWriteOnce
-    resources:
-      requests:
-        storage: 10Gi
-    volumeName: redmine-var-lib-mysql
-- apiVersion: v1
-  kind: PersistentVolumeClaim
-  metadata:
-    annotations: {}
-    creationTimestamp: null
     name: usr-src-redmine-files
   spec:
     accessModes:
@@ -67,6 +56,19 @@ items:
       requests:
         storage: 20Gi
     volumeName: redmine-usr-src-redmine-files
+- apiVersion: v1
+  kind: PersistentVolumeClaim
+  metadata:
+    annotations: {}
+    creationTimestamp: null
+    name: var-lib-mysql
+  spec:
+    accessModes:
+    - ReadWriteOnce
+    resources:
+      requests:
+        storage: 10Gi
+    volumeName: redmine-var-lib-mysql
 - apiVersion: v1
   kind: ServiceAccount
   metadata:
@@ -123,7 +125,7 @@ items:
                 name: redmine-secrets
           - name: MYSQL_DATABASE
             value: redmine
-            image: mysql:5.7
+          image: mysql@sha256:12e70236ec8be07b87a95008a22deb0a2a6289ac81d852e622ea13e8311cec64
           imagePullPolicy: IfNotPresent
           livenessProbe:
             failureThreshold: 3
@@ -221,7 +223,7 @@ items:
               secretKeyRef:
                 key: database-root-password
                 name: redmine-secrets
-          image: library/redmine@sha256:5e3f8240281e0df3114db734dc84692406ffd333df0f7389bff84f0eecdb9968
+          image: library/redmine@sha256:c78f5df0d23cc31742fa8a1c5cf52c02a863920ebd2f68569f1e2916b2e12f80
           imagePullPolicy: Always
           livenessProbe:
             failureThreshold: 5
