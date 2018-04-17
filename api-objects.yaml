@@ -6,7 +6,7 @@ items:
     annotations: {}
     creationTimestamp: null
     labels:
-      app: nextcloud
+      app: redmine
     name: mysql
   spec:
     lookupPolicy:
