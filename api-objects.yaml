@@ -327,6 +327,7 @@ items:
     port:
       targetPort: 3000-tcp
     tls:
+      insecureEdgeTerminationPolicy: Redirect
       termination: edge
     to:
       kind: Service
