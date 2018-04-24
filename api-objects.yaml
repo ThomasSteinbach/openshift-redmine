@@ -125,7 +125,7 @@ items:
                 name: redmine-secrets
           - name: MYSQL_DATABASE
             value: redmine
-          image: mysql@sha256:12e70236ec8be07b87a95008a22deb0a2a6289ac81d852e622ea13e8311cec64
+          image: mysql@sha256:3c993a4fe9bf642fa160289187f9b377c758cb75cc9e63c61a977fdc40d96b65
           imagePullPolicy: IfNotPresent
           livenessProbe:
             failureThreshold: 3
@@ -318,16 +318,16 @@ items:
 - apiVersion: v1
   kind: Route
   metadata:
-    annotations:
-      openshift.io/host.generated: 'true'
     creationTimestamp: null
     labels:
       app: redmine
     name: redmine
   spec:
-    host: redmine-OC_PROJECT_NAME.127.0.0.1.nip.io
+    host: OC_PROJECT_NAME.xarif.de
     port:
       targetPort: 3000-tcp
+    tls:
+      termination: edge
     to:
       kind: Service
       name: redmine
