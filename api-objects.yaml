@@ -125,7 +125,7 @@ items:
                 name: redmine-secrets
           - name: MYSQL_DATABASE
             value: redmine
-          image: mysql@sha256:3c993a4fe9bf642fa160289187f9b377c758cb75cc9e63c61a977fdc40d96b65
+          image: mysql@sha256:81679f23e0ece3e50a7300050191272e5afbf5b66be9b60d2ee0e8b575b152e2
           imagePullPolicy: IfNotPresent
           livenessProbe:
             failureThreshold: 3
@@ -223,7 +223,7 @@ items:
               secretKeyRef:
                 key: database-root-password
                 name: redmine-secrets
-          image: library/redmine@sha256:c78f5df0d23cc31742fa8a1c5cf52c02a863920ebd2f68569f1e2916b2e12f80
+          image: library/redmine@sha256:b598d30831e7c7e4ee053df5828ac0197824aa3bb4c24cb3f541b2e12bae5462
           imagePullPolicy: Always
           livenessProbe:
             failureThreshold: 5
@@ -318,6 +318,7 @@ items:
 - apiVersion: v1
   kind: Route
   metadata:
+    annotations: {}
     creationTimestamp: null
     labels:
       app: redmine
